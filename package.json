@@ -1,5 +1,7 @@
 {
   "name": "electron-remote",
+  "author": "Robin Leboe",
+  "description": "Remote Desktop App",
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
