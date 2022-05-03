@@ -35,6 +35,20 @@ const createTray = () => {
       label: 'Screens',
       submenu: screensMenu,
     },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { role: 'toggleDevTools' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' },
+      ],
+    },
   ]);
 
   Menu.setApplicationMenu(menu);
@@ -70,14 +84,12 @@ function createWindow() {
 
   mainWindow.loadURL(appURL);
 
-  // open DevTools in development
+  // auto-open DevTools in development
   // if (!app.isPackaged) {
   //   mainWindow.webContents.openDevTools();
   // }
 
   mainWindow.once('ready-to-show', () => {
-    // mainWindow.show();
-    // mainWindow.setPosition(0, 0);
     desktopCapturer
       .getSources({
         types: ['window', 'screen'],
@@ -85,35 +97,12 @@ function createWindow() {
       .then((sources) => {
         availableScreens = sources;
         createTray();
-        // for (const source of sources) {
-        //   console.log(source.name);
-        //   if (source.name === 'Screen 1') {
-        //     mainWindow.webContents.send('SET_SOURCE_ID', source.id);
-        //     return;
-        //   }
-        // }
       });
   });
 }
 
-// Setup a local proxy to adjust the paths of requested files when loading
-// them from the local production bundle (e.g.: local fonts, etc...)
-function setupLocalFilesNormalizerProxy() {
-  protocol.registerHttpProtocol(
-    'file',
-    (request, callback) => {
-      const url = request.url.substr(8);
-      callback({ path: path.normalize(`${__dirname}/${url}`) });
-    },
-    (error) => {
-      if (error) console.error('Failed to register protocol');
-    }
-  );
-}
-
 app.whenReady().then(() => {
   createWindow();
-  setupLocalFilesNormalizerProxy();
 
   app.on('activate', function () {
     // re-create window on macOS dock click

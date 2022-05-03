@@ -42,7 +42,7 @@ function App() {
   return (
     <div className='App'>
       <>
-        <span>video screen</span>
+        <span>Please Select Screen from the Screens Menu</span>
         <video ref={videoRef} className='video'>
           Video not available.
         </video>
